@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-Find the namespace WordSearchProblem
+namespace WordSearchProblem
 
-[class wordsearch
+class wordsearch
+
+                        {'A','B','C','E'},
+                        {'S','F','C','S'},
+                        {'A','D','E','E'}
