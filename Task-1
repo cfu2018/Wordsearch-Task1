@@ -4,3 +4,95 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+namespace WordSearchProblem
+{
+    class WordSearch
+    {
+        static void Main(string[] args)
+        {
+            char[,] arr =
+                    {
+                        {'A','B','C','E'},
+                        {'S','F','C','S'},
+                        {'A','D','E','E'}
+                    };
+            string word = "ABCCED";
+
+            bool IsExists = Exist(arr, word);
+            Console.WriteLine(IsExists);
+        }
+
+        /// Mwthod to find in the given word exists in the given board.
+        static public bool Exist(char[,] board, string word)
+        {
+            int rowCount = board.GetLength(0);
+            int colCount = board.GetLength(1);
+            bool[,] memo = new bool[rowCount, colCount];
+
+            // Begin from the 0th index of the "word"
+            for (int i = 0; i < rowCount; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    if (Exist(board, word, memo, 0, i, j, rowCount, colCount))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// Overloaded method to be called recursively. 
+        /// This is based on back tracking dynamic programming concept.s
+        //returns true if word's current index found in board at (i,j) position
+        static public bool Exist(char[,] board, string word, bool[,] memo, int findIndex, int i, int j, int rowCount, int colCount)
+        {
+            // all character till end found in board.
+            if (findIndex == word.Length)
+            {
+                return true;
+            }
+            else
+            {
+                if (i < rowCount && j < colCount && i >= 0 && j >= 0)
+                {
+                    // memo[i,j] is false means that index is not covered yet.
+                    if (memo[i, j] == false && board[i, j] == word[findIndex])
+                    {
+                        // mark it as covered
+                        memo[i, j] = true;
+
+                        // find next character at same row next column
+                        if (Exist(board, word, memo, findIndex + 1, i, j + 1, rowCount, colCount))
+                        {
+                            return true;
+                        }// find next character at next row same column
+                        else if (Exist(board, word, memo, findIndex + 1, i + 1, j, rowCount, colCount))
+                        {
+                            return true;
+                        }// find next character at same row previous column
+                        else if (Exist(board, word, memo, findIndex + 1, i, j - 1, rowCount, colCount))
+                        {
+                            return true;
+                        }// find next character at previous row same column
+                        else if (Exist(board, word, memo, findIndex + 1, i - 1, j, rowCount, colCount))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            // mark it as uncovered.
+                            memo[i, j] = false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+    
+    }
+}
